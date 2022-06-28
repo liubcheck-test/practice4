@@ -1,0 +1,32 @@
+image: maven:latest
+
+stages:
+  - analysis
+  - test
+  - build
+  - deploy
+
+checkstyle-job:
+  stage: analysis
+  script:
+    - mvn checkstyle:check
+
+jar-package-job:
+  stage: build
+  script:
+    - mvn package
+  artifacts:
+    paths:
+      - target/*.jar
+
+unit-test-job:
+  stage: test
+  script:
+    - echo "Tests are running... Wait some seconds..."
+    - mvn test
+
+deploy:
+  stage: deploy
+  script:
+    - mvn deploy -s ci_settings.xml
+
